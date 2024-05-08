@@ -72,11 +72,11 @@ app.get("/getResena", (req, res) => {
 // TRAER RESEÑAS DEL FRONTEND Y ENVIAR A LA BASE DE DATOS
 
 app.post('/postResena', (req, res) => {
-    const { name, resena } = req.body;
+    const { name, resena, likes } = req.body;
     
     // Insertar la reseña en la base de datos
-    const sql = `INSERT INTO resenas (name, resena) VALUES (?, ?)`;
- connection.query(sql, [name, resena], (err, result) => {
+    const sql = `INSERT INTO resenas (name, resena, likes) VALUES (?, ?, ?)`;
+ connection.query(sql, [name, resena, likes], (err, result) => {
       if (err) {
         console.error('Error al insertar la reseña:', err);
         res.status(500).send('Error al insertar la reseña');
