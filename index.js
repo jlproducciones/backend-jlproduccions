@@ -51,6 +51,7 @@ app.get("/", (req, res) => {
 
 
 
+
 // Enviar reseñas al frontend
 app.get("/getResena", (req, res) => {
     const sql = "SELECT * FROM resenas";
@@ -68,7 +69,7 @@ app.get("/getResena", (req, res) => {
 
 
 
-
+// TRAER RESEÑAS DEL FRONTEND Y ENVIAR A LA BASE DE DATOS
 
 app.post('/postResena', (req, res) => {
     const { name, resena } = req.body;
@@ -87,3 +88,22 @@ app.post('/postResena', (req, res) => {
   });
   
  
+
+  // TRAER LIKES DEL FRONTEND Y ENVIAR A LA BASE DE DATOS
+
+  app.post('/postLikeResena', (req, res) => {
+    // Incrementar el número de likes en 1 para todas las reseñas (o para una reseña específica si es necesario)
+    const sql = `UPDATE resenas SET likes = likes + 1`;
+    connection.query(sql, (err, result) => {
+        if (err) {
+            console.error('Error al incrementar el número de likes:', err);
+            res.status(500).send('Error al incrementar el número de likes');
+        } else {
+            console.log('Número de likes incrementado con éxito');
+            res.status(200).send('Número de likes incrementado con éxito');
+        }
+    });
+});
+
+
+  // ENVIAR LIKES AL FRONTEND 
