@@ -108,7 +108,7 @@ app.post('/postResena', (req, res) => {
 
   // ENVIAR BANDAS A LA BASE DE DATOS
 
-  app.post("/sendBands", (req, res) => {
+  app.post('/sendBands', (req, res) => {
    const {name, gender, leach, number, email} = req.body
    const sql = "INSERT INTO bands (name, gender, leach, number, email)  VALUES( ?, ?, ?, ?, ?)"
   connection.query(sql, [name, gender, leach, number, email], (err, result) => {
@@ -122,5 +122,22 @@ else{
 }
   })  
 
+
+})
+
+
+// ENVIAR BANDAS AL FRONTEND
+
+app.get("/getBands", (req, res) => {
+sql = "SELECT * FROM bands"
+connection.query(sql, (err, result) => {
+    if(err){
+        console.log("Error al traer las bandas ", err),
+        res.status(500).json({error: "Error al traer las bandas del backend "})
+    }else {
+        console.log("Bandas traidas con exito")
+        res.status(200).json(result)
+    }
+})
 
 })
