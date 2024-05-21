@@ -106,4 +106,21 @@ app.post('/postResena', (req, res) => {
 });
 
 
-  // ENVIAR LIKES AL FRONTEND 
+  // ENVIAR BANDAS A LA BASE DE DATOS
+
+  app.post("/sendBands", (req, res) => {
+   const {name, gender, leach, number, email} = req.body
+   const sql = "INSERT INTO bands (name, gender, leach, number, email)  VALUES( ?, ?, ?, ?, ?)"
+  connection.query(sql, [name, gender, leach, number, email], (err, result) => {
+if(err){
+    console.log("Erro al enviar la banda")
+    res.status(500).send("Error al enviar nueva banda")
+}
+else{
+    console.log("Nueva banda añadida con exito")
+    res.status(200).send("nueva banda añadida con exito")
+}
+  })  
+
+
+})
