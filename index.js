@@ -4,7 +4,7 @@ const mysql = require("mysql")
 const port = 4000
 const cors = require("cors")
 const corsOptions = {
-    origin: 'https://jlproducciones.github.io',
+    origin: ['https://jlproducciones.github.io', 'https://jlproducciones.github.io/administrador'],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type']
   };
