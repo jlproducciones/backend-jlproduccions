@@ -141,3 +141,23 @@ connection.query(sql, (err, result) => {
 })
 
 })
+
+
+// REGISTRO DE BANDAS
+
+app.post("/sendRegisterBand", (req, res) => {
+const {date, time} = req.body
+const sql = "INSERT INTO bands (date + time) VALUES (?, ?)"
+
+connection.query(sql, [date, time], (error, response) => {
+    if(err){
+        console.log("El registro no pudo ser enviado " + error)
+        res.status(500).send("Hubo un problema con el nevio del registro " )
+    }else {
+        console.log("El registro ha sido enviado exitosamente " + response)
+        res.status(200).send("El registro ha sido enviado exitosamente")   
+     }
+})
+
+
+})
