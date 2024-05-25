@@ -146,8 +146,8 @@ connection.query(sql, (err, result) => {
 // REGISTRO DE BANDAS
 
 app.post("/sendRegisterBand", (req, res) => {
-const {date, time} = req.body
-const sql = "INSERT INTO bands (date + time) VALUES (?, ?)"
+const {id,date, time} = req.body
+const sql = "INSERT INTO bands (date, time) VALUES (?, ?) WHERE id = ?";
 
 connection.query(sql, [date, time], (error, response) => {
     if(err){
