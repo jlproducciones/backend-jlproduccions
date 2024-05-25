@@ -144,20 +144,48 @@ connection.query(sql, (err, result) => {
 
 
 // REGISTRO DE BANDAS
-
 app.post("/sendRegisterBand", (req, res) => {
-const {id,date, time} = req.body
-const sql = "INSERT INTO bands (date, time) VALUES (?, ?) WHERE id = ?";
+    const { id, date, time } = req.body;
+    const sqlSelect = "SELECT * FROM bands WHERE id = ?";
+    const sqlInsert = "INSERT INTO bands (id, date, time) VALUES (?, ?, ?)";
+  
+    connection.query(sqlSelect, [id], (error, rows) => {
+      if (error) {
+        console.log("Error al buscar la banda: " + error);
+        res.status(500).send("Hubo un problema al buscar la banda.");
+        return;
+      }
+  
+      if (rows.length === 0) {
+        console.log("No se encontró la banda con ID: " + id);
+        res.status(404).send("No se encontró la banda con el ID proporcionado.");
+        return;
+      }
+  
+      // Si se encuentra la banda, insertar el registro
+      connection.query(sqlInsert, [id, date, time], (error, result) => {
+        if (error) {
+          console.log("Error al insertar el registro: " + error);
+          res.status(500).send("Hubo un problema al insertar el registro.");
+          return;
+        }
+  
+        console.log("Registro insertado correctamente.");
+        res.status(200).send("Registro insertado correctamente.");
+      });
+    });
+  });
 
-connection.query(sql, [date, time], (error, response) => {
-    if(err){
-        console.log("El registro no pudo ser enviado " + error)
-        res.status(500).send("Hubo un problema con el nevio del registro " )
-    }else {
-        console.log("El registro ha sido enviado exitosamente " + response)
-        res.status(200).send("El registro ha sido enviado exitosamente")   
-     }
-})
+app.get("/getRegisters", (req, res) => {
+    
 
-
+    connection.query(sql, (err, result) => {
+        if(err){
+            console.log("Error al traer registros " + err)
+            res.status(500).json({error: "Error al traer los registros"})
+        } else{
+            console.log("Registros traidos con exito " + result)
+            res.status(200).json({result})
+        }
+    })
 })
