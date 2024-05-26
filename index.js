@@ -142,39 +142,43 @@ connection.query(sql, (err, result) => {
 
 })
 
-
-// REGISTRO DE BANDAS
 app.post("/sendRegisterBand", (req, res) => {
     const { id, date, time } = req.body;
-    const sqlSelect = "SELECT * FROM bands WHERE id = ?";
-    const sqlInsert = "INSERT INTO bands (id, date, time) VALUES (?, ?, ?)";
+    const sqlSelect = "SELECT date, time FROM bands WHERE id = ?";
+    const sqlUpdate = "UPDATE bands SET date = CONCAT(date, ?), time = CONCAT(time, ?) WHERE id = ?";
   
     connection.query(sqlSelect, [id], (error, rows) => {
-      if (error) {
-        console.log("Error al buscar la banda: " + error);
-        res.status(500).send("Hubo un problema al buscar la banda.");
-        return;
-      }
-  
-      if (rows.length === 0) {
-        console.log("No se encontró la banda con ID: " + id);
-        res.status(404).send("No se encontró la banda con el ID proporcionado.");
-        return;
-      }
-  
-      // Si se encuentra la banda, insertar el registro
-      connection.query(sqlInsert, [id, date, time], (error, result) => {
         if (error) {
-          console.log("Error al insertar el registro: " + error);
-          res.status(500).send("Hubo un problema al insertar el registro.");
-          return;
+            console.log("Error al buscar la banda: " + error);
+            res.status(500).send("Hubo un problema al buscar la banda.");
+            return;
         }
-  
-        console.log("Registro insertado correctamente.");
-        res.status(200).send("Registro insertado correctamente.");
-      });
+
+        if (rows.length === 0) {
+            console.log("No se encontró la banda con ID: " + id);
+            res.status(404).send("No se encontró la banda con el ID proporcionado.");
+            return;
+        }
+
+        const current_date = rows[0].date || ""; // Si no hay valor, establece un valor vacío
+        const current_time = rows[0].time || ""; // Si no hay valor, establece un valor vacío
+
+        const new_date = current_date + date;
+        const new_time = current_time + time;
+
+        connection.query(sqlUpdate, [new_date, new_time, id], (error, result) => {
+            if (error) {
+                console.log("Error al actualizar el registro: " + error);
+                res.status(500).send("Hubo un problema al actualizar el registro.");
+                return;
+            }
+
+            console.log("Registro actualizado correctamente.");
+            res.status(200).send("Registro actualizado correctamente.");
+        });
     });
-  });
+});
+
 
 app.get("/getRegisters", (req, res) => {
     
