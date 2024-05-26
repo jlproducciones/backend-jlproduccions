@@ -109,9 +109,9 @@ app.post('/postResena', (req, res) => {
   // ENVIAR BANDAS A LA BASE DE DATOS
 
   app.post('/sendBands', (req, res) => {
-   const {name, gender, leach, number, email} = req.body
-   const sql = "INSERT INTO bands (name, gender, leach, number, email)  VALUES( ?, ?, ?, ?, ?)"
-  connection.query(sql, [name, gender, leach, number, email], (err, result) => {
+   const {name, gender, leach, number, email, date, time} = req.body
+   const sql = "INSERT INTO bands (name, gender, leach, number, email, date, time)  VALUES( ?, ?, ?, ?, ?, ?, ?)"
+  connection.query(sql, [name, gender, leach, number, email, date, time], (err, result) => {
 if(err){
     console.log("Erro al enviar la banda")
     res.status(500).send("Error al enviar nueva banda")
@@ -141,6 +141,11 @@ connection.query(sql, (err, result) => {
 })
 
 })
+
+
+// REGISTROS
+
+
 
 app.post("/sendRegisterBand", (req, res) => {
     const { id, date, time } = req.body;
