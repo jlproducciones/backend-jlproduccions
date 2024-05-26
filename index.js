@@ -178,7 +178,7 @@ app.post("/sendRegisterBand", (req, res) => {
 
 app.get("/getRegisters", (req, res) => {
     
-
+const sql = "SELECT date, time FROM bands";
     connection.query(sql, (err, result) => {
         if(err){
             console.log("Error al traer registros " + err)
