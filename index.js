@@ -184,17 +184,19 @@ app.post("/sendRegisterBand", (req, res) => {
     });
 });
 
+app.get("/getRegisters/:id", (req, res) => {
+    const bandId = req.params.id; // Obtener el ID de la banda de la ruta
 
-app.get("/getRegisters", (req, res) => {
+    // Construir la consulta SQL filtrando por el ID de la banda
+    const sql = "SELECT date, time FROM bands WHERE id = ?";
     
-const sql = "SELECT date, time FROM bands";
-    connection.query(sql, (err, result) => {
-        if(err){
-            console.log("Error al traer registros " + err)
-            res.status(500).json({error: "Error al traer los registros"})
-        } else{
-            console.log("Registros traidos con exito " + result)
-            res.status(200).json({result})
+    connection.query(sql, [bandId], (err, result) => {
+        if (err) {
+            console.log("Error al traer registros " + err);
+            res.status(500).json({ error: "Error al traer los registros" });
+        } else {
+            console.log("Registros traidos con exito " + result);
+            res.status(200).json({ result });
         }
-    })
-})
+    });
+});
