@@ -9,6 +9,8 @@ const corsOptions = {
     allowedHeaders: ['Content-Type']
   };
   
+  const resend = require("resend")
+
   app.use(cors(corsOptions));
   app.use(express.json());
 
@@ -195,8 +197,48 @@ app.get("/getRegisters/:id", (req, res) => {
             console.log("Error al traer registros " + err);
             res.status(500).json({ error: "Error al traer los registros" });
         } else {
-            console.log("Registros traidos con exito " + result);
+            console.log("Registros traidos con exito " + res.json(result));
             res.status(200).json({ result });
         }
     });
+
+
+
 });
+
+
+
+
+// ENVIAR EMAILS ORM
+
+app.post("/sendMessage", (req, res) => {
+
+    const {email, motive, message} = req.body
+
+    const serverResend = new resend("re_BBqbLVjN_7QjJ7J9nopq8jdbqPwctZQsM")
+
+
+    const correctSendFunction = () => {serverResend.emails.send({
+        from: `${email}`,
+        to: 'jlproducciones96@gmail.com',
+        subject: `${motive}`,
+        html: `${message}`
+      });
+      }
+
+const functionSend = (err, result) => {
+    if(err){
+        res.status(500).send("Error del servidor para envio de correo electronico " + err),
+        console.log("Error al enviar correo electronico")
+    }else{
+        correctSendFunction()
+    res.status(200).send("Correo electronico enviado correctamente")
+    }
+}
+
+if(email && message && motive){
+functionSend()}
+else{
+    return res.status(400).send("Faltan datos requeridos para enviar el correo electrónico.");
+}
+})
